@@ -1,0 +1,91 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Escape the Haunted House — Tax & Tip</title>
+<style>
+:root{font-family:Arial,sans-serif;color:#241c2f;background:#120f20}*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top,#3b2752 0%,#1b1730 55%,#0e101c 100%);min-height:100vh}.wrap{max-width:820px;margin:auto;padding:18px}
+header{background:linear-gradient(135deg,#332244,#1b152a);border:2px solid #8b689e;color:white;border-radius:16px;padding:20px;text-align:center}h1{font-size:27px;margin:0 0 8px}
+.card{background:#fffaf2;border:2px solid #40314e;border-radius:13px;padding:18px;margin-top:16px}
+h2{margin:0 0 12px;font-size:21px}.small{font-size:14px}.muted{color:#544d60}
+.example{background:#f1eaf7;border-left:5px solid #7c52a0;padding:12px;line-height:1.7}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+label{display:block;font-weight:bold;font-size:15px}input{width:100%;padding:13px;font-size:20px;border:2px solid #81748e;border-radius:8px;margin-top:6px}
+input.bad{border-color:#bc3232;background:#fff1f1}input:focus{outline:3px solid #d9a4e4}
+button{cursor:pointer;font-size:16px;border-radius:9px;border:2px solid #3b2d4c;padding:11px 14px;background:#fff}
+button.primary{background:#643b7d;color:white;font-weight:bold}
+button:disabled{opacity:.45;cursor:not-allowed}.doors{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:15px 0}
+.door{position:relative;min-height:170px;background:repeating-linear-gradient(90deg,#422638 0 13px,#563344 13px 16px,#342033 16px 19px);display:flex;align-items:center;justify-content:flex-end;flex-direction:column;gap:6px;padding:15px 7px 16px;font-weight:bold;color:#ffe6b0;border:7px ridge #7d6077;border-bottom:10px solid #483244;border-radius:60px 60px 5px 5px;box-shadow:inset 0 0 0 3px #1c1320,inset 0 0 20px #110d19,0 8px 0 #231827;transition:transform .25s,box-shadow .25s;overflow:hidden}
+.door:before{content:'🕸️';position:absolute;left:8px;top:20px;font-size:29px;opacity:.85}
+.door:after{content:'';position:absolute;right:13px;top:83px;width:11px;height:11px;border-radius:50%;background:#d4aa53;box-shadow:0 0 9px #f4cb74}
+.door span{font-size:28px;filter:drop-shadow(0 0 5px #b780b4)}
+.door .price{position:relative;z-index:1;background:#1b1423e8;color:#fff0c4;padding:7px 10px;border:1px solid #c19a62;border-radius:6px;font-size:21px;min-width:68px}
+.door.selected{border-color:#e0bd75;box-shadow:0 0 17px #d8a75d,inset 0 0 0 3px #1c1320}
+.door.wrong{border-color:#bf5151;box-shadow:0 0 12px #a53b3b}
+.door.open{background:linear-gradient(100deg,#130e1b 0 40%,#a6e0a7 46%,#d7f3c2 52%,#271b30 60%);border-color:#9ac994;box-shadow:0 0 28px #b7ef9c;transform:perspective(350px) rotateY(-12deg)}
+.door.open:before{content:'✨';opacity:1}.door.open:after{display:none}
+.door:focus-visible{outline:4px solid #f4d17e;outline-offset:4px}
+@media(prefers-reduced-motion:reduce){.door{transition:none}}
+.feedback{min-height:48px;font-weight:bold;line-height:1.5}
+.progress{display:flex;gap:7px;margin-top:14px}.dot{height:12px;flex:1;background:#d6c9df;border-radius:10px}.dot.done{background:#60a97b}
+
+.scene{position:relative;overflow:hidden;border:3px solid #b68b55;border-radius:14px;height:210px;margin:14px 0;background:linear-gradient(#141527,#342845 68%,#332a30 68%);box-shadow:inset 0 0 30px #0a0819}
+.scene:before{content:"";position:absolute;left:0;right:0;bottom:22px;height:4px;background:#76566d;box-shadow:0 14px #17141f}
+.scene .moon{position:absolute;right:11%;top:17px;width:60px;height:60px;border-radius:50%;background:#f6d5a0;box-shadow:0 0 36px #dfb581}
+.scene .house{position:absolute;bottom:24px;left:20%;width:60%;height:110px;background:#201a29;border:3px solid #15131e;border-radius:4px}
+.scene .house:before{content:"";position:absolute;left:-11%;right:-11%;top:-56px;height:0;border-left:80px solid transparent;border-right:80px solid transparent;border-bottom:60px solid #17121f;filter:drop-shadow(0 0 3px #080812)}
+.scene .window{position:absolute;width:28px;height:35px;background:#dca553;top:24px;border:4px solid #16121e;box-shadow:0 0 13px #d39b3c}
+.scene .window.left{left:18%}.scene .window.right{right:18%}
+.scene .entry{position:absolute;bottom:0;left:calc(50% - 20px);width:40px;height:64px;background:#4e3546;border:4px solid #130e1a;border-bottom:0;border-radius:18px 18px 0 0}
+.scene .bat{position:absolute;left:10%;top:28px;font-size:29px}.scene .bat.two{left:27%;top:12px;font-size:20px}
+.scene .pumpkin{position:absolute;bottom:23px;right:8%;font-size:42px}
+.companion{position:absolute;bottom:20px;left:8%;display:flex;flex-direction:column;align-items:center;z-index:2}
+.companion .ghost{font-size:58px;filter:drop-shadow(0 0 12px #c5b8e6);animation:float 3s ease-in-out infinite}
+.companion .speech{background:#fffaf2;color:#292039;border:2px solid #7d6594;border-radius:12px;padding:5px 10px;font-weight:bold;font-size:13px;max-width:145px;text-align:center}
+@keyframes float{50%{transform:translateY(-8px)}}
+.roomscene{height:160px;background:repeating-linear-gradient(90deg,#33253d 0 42px,#3a2b43 42px 45px);border-color:#866a91}
+.roomscene:before{bottom:0;height:27px;background:repeating-linear-gradient(90deg,#352638 0 35px,#241a2b 35px 70px);box-shadow:none}
+.roomscene .walllamp{position:absolute;right:11%;top:18px;font-size:48px;filter:drop-shadow(0 0 12px #f7aa50)}
+.roomscene .roomicon{position:absolute;left:40%;top:27px;font-size:65px}
+.roomscene .companion{left:9%;bottom:11px}
+.roomscene .companion .ghost{font-size:44px}
+.roomscene .companion .speech{font-size:12px}
+.exit-scene{height:280px;background:linear-gradient(#24385b,#718ba1 64%,#4c7a4e 64%);border-color:#92b57e}
+.exit-scene .moon{background:#fff0ae;box-shadow:0 0 50px #f8e9b3;right:10%;top:17px}
+.exit-scene .house{left:9%;width:34%;height:90px;bottom:54px}
+.exit-scene .house:before{border-left-width:45px;border-right-width:45px;border-bottom-width:48px;top:-45px}
+.exit-scene .window{width:16px;height:20px;top:20px}.exit-scene .entry{height:45px;width:27px;left:calc(50% - 13px)}
+.exit-scene .companion{left:61%;bottom:40px}.exit-scene .companion .ghost{font-size:70px}
+.exit-scene .path{position:absolute;left:38%;bottom:0;width:40%;height:60px;background:#b5a28a;clip-path:polygon(0 0,30% 0,100% 100%,0 100%)}
+.exit-sign{font-size:22px;color:#22603d;font-weight:800;text-align:center}
+.actions{display:flex;gap:10px;flex-wrap:wrap}.hidden{display:none}
+@media(max-width:560px){.grid{grid-template-columns:1fr}.doors{gap:5px}.door{font-size:14px;padding:9px 4px;min-height:148px;border-width:5px}.door .price{font-size:17px;min-width:0}.door:before{font-size:21px}}
+</style></head><body><main class="wrap">
+<header><h1>🎃 Escape the Haunted House!</h1><div>Tax + Tip Math Challenge • 5 Locked Rooms</div><div class="progress" id="progress"></div></header>
+<section class="card" id="intro"><div class="scene" aria-label="Haunted house under the moon, with a friendly ghost guide"><div class="moon"></div><div class="bat">🦇</div><div class="bat two">🦇</div><div class="house"><div class="window left"></div><div class="window right"></div><div class="entry"></div></div><div class="companion"><span class="ghost">👻</span><span class="speech">I'm Boo! Let's escape!</span></div><div class="pumpkin">🎃</div></div><h2>Your Mission</h2><p>You are trapped in a haunted house! Solve each bill to unlock the correct door. Find <b>10% tax</b> and a <b>10% or 20% tip</b>, both based on the original bill. Add all three amounts to find the final total.</p>
+<div class="example"><b>ONE WORKED EXAMPLE</b><br>Bill: $20 • Tax: 10% • Tip: 20%<br>10% of $20 = <b>$2 tax</b><br>20% of $20 = <b>$4 tip</b> (double the 10%)<br>Final total = $20 + $2 + $4 = <b>$26</b></div>
+<p class="small">Type the tax, tip, and total. The correct door will open when your math is right. Wrong answer? Edit it and try again!</p>
+<button class="primary" onclick="start()">Enter the Haunted House →</button></section>
+<section class="card hidden" id="game"><div class="small muted" id="roomcount"></div><h2 id="roomname"></h2><div class="scene roomscene"><div class="walllamp">🕯️</div><div class="roomicon" id="roomicon">🕸️</div><div class="companion"><span class="ghost">👻</span><span class="speech" id="boospeech">You can do it!</span></div></div><p id="bill"></p>
+<div class="grid"><label>10% Tax ($)<input id="tax" type="number" min="0" step="1" inputmode="numeric"></label><label id="tiplabel">Tip ($)<input id="tip" type="number" min="0" step="1" inputmode="numeric"></label><label>Final Total ($)<input id="total" type="number" min="0" step="1" inputmode="numeric"></label></div>
+<p><b>Three spooky doors! Your correct total unlocks the right one:</b></p><div class="doors" id="doors"></div>
+<div class="feedback" id="feedback" aria-live="polite"></div><div class="actions"><button class="primary" id="check" onclick="check()">Unlock Door</button><button onclick="clearAnswers()">Clear / Try Again</button><button class="hidden primary" id="next" onclick="nextRoom()">Next Room →</button></div>
+</section>
+<section class="card hidden" id="end"><div class="scene exit-scene" aria-label="Outside the haunted house, in the moonlight, with Boo the friendly ghost celebrating"><div class="moon"></div><div class="house"><div class="window left"></div><div class="window right"></div><div class="entry"></div></div><div class="path"></div><div class="companion"><span class="ghost">👻</span><span class="speech">We made it OUT!</span></div></div><div class="exit-sign">🌟 YOU ARE OUTSIDE THE HAUNTED HOUSE! 🌟</div><h2>🏆 You Escaped!</h2><p>You unlocked all 5 doors by calculating tax, tip, and final total. Great job!</p><p><b>Teacher check:</b> Take a screenshot of this page and submit it in Google Classroom.</p><button class="primary" onclick="restart()">Play Again</button></section>
+<section class="card small"><b>Student reminder:</b> Tax = 10% of original bill. Tip = 10% or 20% of original bill. Final total = original bill + tax + tip. This game uses a simplified 10% tax rate for practice.</section>
+</main><script>
+const rooms=[["The Haunted Kitchen", 20, 10, ["$22", "$24", "$26"]], ["The Ghostly Dining Room", 30, 20, ["$36", "$39", "$42"]], ["The Vampire Caf\u00e9", 40, 10, ["$44", "$48", "$52"]], ["The Witch's Pantry", 50, 20, ["$55", "$65", "$70"]], ["The Pumpkin Ballroom", 60, 10, ["$66", "$72", "$78"]]];
+let current=0,selected=null,unlocked=false,completed=0;
+const $=id=>document.getElementById(id);
+function progress(){$('progress').innerHTML=rooms.map((_,i)=>'<div class="dot '+(i<completed?'done':'')+'"></div>').join('')}
+function start(){$('intro').classList.add('hidden');$('game').classList.remove('hidden');load()}
+function load(){unlocked=false;selected=null;let r=rooms[current];$('roomicon').textContent=['🍲','🕸️','🧛','🧙','🎃'][current];$('boospeech').textContent=['Follow me!','Stay brave!','Keep going!','Almost there!','Last door!'][current];$('roomcount').textContent='ROOM '+(current+1)+' OF 5';$('roomname').textContent=r[0];$('bill').innerHTML='A spooky guest has a <b>$'+r[1]+'</b> bill. Add <b>10% tax</b> and a <b>'+r[2]+'% tip</b>.';$('tiplabel').firstChild.textContent=r[2]+'% Tip ($)';$('doors').innerHTML=r[3].map((d,i)=>'<button class="door" onclick="choose('+i+')" id="door'+i+'" aria-label="Spooky door '+(i+1)+', '+d+'"><span>🔒</span><span class="price">'+d+'</span></button>').join('');$('next').classList.add('hidden');$('check').disabled=false;clearAnswers();progress()}
+function choose(i){if(unlocked)return;selected=i;rooms[current][3].forEach((_,j)=>$('door'+j).classList.toggle('selected',j===i));$('feedback').textContent='Door selected. Press Unlock Door to check.'}
+function clearAnswers(){if(unlocked)return;['tax','tip','total'].forEach(k=>{$(k).value='';$(k).classList.remove('bad')});selected=null;document.querySelectorAll('.door').forEach(b=>b.classList.remove('selected','wrong'));$('feedback').textContent=''}
+function check(){let r=rooms[current],want=[r[1]/10,r[1]*r[2]/100,r[1]*(1+.1+r[2]/100)];let ids=['tax','tip','total'];let values=ids.map(k=>$(k).value.trim());ids.forEach(k=>$(k).classList.remove('bad'));if(values.some(v=>v==='')){$('feedback').textContent='Fill in all three math boxes. You can edit any answer.';return}
+let ok=values.map(Number).every((v,i)=>Math.abs(v-want[i])<.001);if(!ok){ids.forEach((k,i)=>{if(Math.abs(Number(values[i])-want[i])>=.001)$(k).classList.add('bad')});$('feedback').textContent='Not quite. Check the highlighted box(es), correct them, and try again!';return}
+if(selected===null){selected=r[3].indexOf('$'+want[2]);if(selected>=0){$('door'+selected).classList.add('selected')}}
+if(r[3][selected]!=='$'+want[2]){selected=r[3].indexOf('$'+want[2]);document.querySelectorAll('.door').forEach(b=>b.classList.remove('selected','wrong'));if(selected>=0)$('door'+selected).classList.add('selected')}
+unlocked=true;completed=current+1;if(selected>=0){$('door'+selected).classList.add('open');$('door'+selected).querySelector('span').textContent='🔓'}progress();$('feedback').textContent='🔓 Door unlocked! Boo says: Great job! Click Next Room to continue.';$('check').disabled=true;$('next').classList.remove('hidden');$('next').textContent=current===4?'Finish Escape →':'Next Room →'}
+function nextRoom(){if(!unlocked)return;if(current===4){$('game').classList.add('hidden');$('end').classList.remove('hidden')}else{current++;load()}}
+function restart(){current=0;completed=0;$('end').classList.add('hidden');$('intro').classList.remove('hidden');progress()}
+['tax','tip','total'].forEach(k=>$(k).addEventListener('input',()=>{$(k).classList.remove('bad');if(!unlocked)$('feedback').textContent='Answer updated. Press Unlock Door when ready.'}));
+progress();
+</script></body></html>
